@@ -15,10 +15,10 @@ primary_region = 'waw'
 concurrency = { hard_limit = 1, soft_limit = 1 }
 
 [[vm]]
-  memory = '128mb'
+  memory = '256mb'
   cpu_kind = 'shared'
   cpus = 1
-  memory_mb = 128
+  memory_mb = 256
 
 [env]
   FULL_SCAN = "false"
