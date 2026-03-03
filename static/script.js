@@ -85,6 +85,7 @@ const hideBuffering = () => {
 
 const deactiveBuffering = (state) => {
   const { player } = state;
+  const shouldUnmute = state.isInteracted && !state.isMuted;
 
   // make sure that the player is muted so that it does not play sound
   // when buffering is active
@@ -92,9 +93,7 @@ const deactiveBuffering = (state) => {
 
   setTimeout(() => {
     hideBuffering();
-    if (state.isInteracted && !state.isMuted) {
-      // browsers prevent autoplay without user interaction
-      // unmute if it was not muted before
+    if (shouldUnmute) {
       player.unMute();
       state.isMuted = false;
     }
@@ -244,12 +243,13 @@ const changeChannel = async (state, offset) => {
   if (newVideo) {
     const videoId = newVideo.id;
     if (videoId) {
+      const shouldUnmute = state.isInteracted && !state.isMuted;
       player.cueVideoById({ videoId, startSeconds: newVideo.sectionStart });
       player.mute();
       player.playVideo();
-      if (state.isInteracted && !state.isMuted) {
-        state.muted = false;
+      if (shouldUnmute) {
         player.unMute();
+        state.isMuted = false;
       }
     }
   }
@@ -263,13 +263,13 @@ const jumpToChannel = async (state, channelId) => {
   if (newVideo) {
     const videoId = newVideo.id;
     if (videoId) {
+      const shouldUnmute = state.isInteracted && !state.isMuted;
       player.cueVideoById({ videoId, startSeconds: newVideo.sectionStart });
       player.mute();
       player.playVideo();
-
-      if (state.isInteracted && !state.isMuted) {
-        state.muted = false;
+      if (shouldUnmute) {
         player.unMute();
+        state.isMuted = false;
       }
     }
   }
